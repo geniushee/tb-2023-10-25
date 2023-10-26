@@ -8,6 +8,7 @@ public class App {
     Scanner scanner; // 입력을 받기 위한 scanner 생성
     int quotesid; // 명언 id넘버 부여를 위한 객체
     List<Quote> quotations; // 명언 저장소
+    Rq Rq; // Rq 정규식을 이용한 queryString 분해
 
     App() {
         scanner = new Scanner(System.in);
@@ -21,11 +22,15 @@ public class App {
         while (true) {
             System.out.print("명령) ");
             String cmd = scanner.nextLine();
+            Rq = new Rq(cmd);
+            String action = Rq.getAction();
+
             if (cmd.equals("종료")) {
                 break;
             } else if (cmd.equals("등록")) post();
             else if (cmd.equals("목록")) list();
-            else if (cmd.startsWith("삭제?")) remove(cmd);
+            else if (action.equals("삭제")) remove();
+            else if (action.equals("수정")) modify();
         }
 //        System.out.printf("입력하신 명령: %s\n", cmd);
     }
@@ -51,12 +56,51 @@ public class App {
         }
     }
 
-    void remove(String cmd){
+    void remove() {
         // cmd를 받았을 때 처리하는 방법 1.replace  2.substring
-        String idStr = cmd.replace("삭제?id=", "");
-        int id = Integer.parseInt(idStr);
+        int id = Rq.getParamAsInt("id", 0);
+        for(int i = quotations.size() - 1 ; i >= 0; i--){
+            int q_id = quotations.get(i).no;
+            if (q_id == id){
+              quotations.remove(i);
+              System.out.println((i + 1) + "번 명언이 삭제되었습니다.");
+              return;
+            }
+        }
 
-        System.out.println(idStr + "번 명언을 삭제합니다.");
+
     }
+
+//        System.out.println(idStr +"번 명언을 삭제합니다.");
+
+    void modify() {
+
+    }
+
+    // Rq를 이용하여 리팩토링 함.
+//    int getParamAsInt(String cmd, String paramName, int DefaultValue) {
+//        String[] cmdBits = cmd.split("\\?", 2);
+//        String action = cmdBits[0];
+//        String queryString = cmdBits[1];
+//        String[] queryStringBits = queryString.split("&");
+//
+//        for (int i = 0; i < queryString.length(); i++) {
+//            String queryParamStr = queryStringBits[i];
+//
+//            String[] queryParamBits = queryParamStr.split("=", 2);
+//            String _paramName = queryParamBits[0];
+//            String paramValue = queryParamBits[1];
+//
+//            if(_paramName.equals(paramName)) {
+//                try {
+//                    return Integer.parseInt(paramValue);
+//                }
+//                catch(NumberFormatException e){
+//                    return DefaultValue;
+//                }
+//            }
+//        }
+//        return DefaultValue;
+//    }
 }
 
