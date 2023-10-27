@@ -15,32 +15,34 @@ public class Rq {
 
         String[] cmdBits = this.cmd.split("\\?", 2);
         action = cmdBits[0];
-        if (cmdBits.length >= 2) {
-            queryString = cmdBits[1];
-            String[] queryStringBits = queryString.split("&");
-            for (String Bits : queryStringBits) {
-                String[] paramBits = Bits.split("=", 2);
-
-                String paramName = paramBits[0];
-                String paramValue = paramBits[1];
-
-                paramsMap.put(paramName, paramValue);
-            }
+        if (cmdBits.length < 2) {
+            return;
         }
+
+        queryString = cmdBits[1];
+        String[] queryStringBits = queryString.split("&");
+        for (String Bits : queryStringBits) {
+            String[] paramBits = Bits.split("=", 2);
+
+            String paramName = paramBits[0];
+            String paramValue = paramBits[1];
+
+            paramsMap.put(paramName, paramValue);
+        }
+
     }
 
-    public String getAction(){
+    public String getAction() {
         return action;
     }
 
-    public int getParamAsInt(String paramName, int defaultValue){
+    public int getParamAsInt(String paramName, int defaultValue) {
         String paramvalue = paramsMap.get(paramName);
 
-        if(paramvalue != null){
+        if (paramvalue != null) {
             try {
                 return Integer.parseInt(paramvalue);
-            }
-            catch(NumberFormatException ignored){
+            } catch (NumberFormatException ignored) {
             }
         }
         return defaultValue;
