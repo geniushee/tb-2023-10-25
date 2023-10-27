@@ -38,7 +38,7 @@ public class App {
                     remove(Rq);
                     break;
                 case "수정":
-                    modify();
+                    modify(Rq);
                     break;
             }
         }
@@ -96,10 +96,28 @@ public class App {
         return -1;
     }
 
-//        System.out.println(idStr +"번 명언을 삭제합니다.");
+    private void modify(Rq rq) {
+        int id = rq.getParamAsInt("id", 0);
+        if(id == 0){
+            System.out.println("id를 정확히 입력해주세요.");
+            return;
+        }
+        int index = getIndexOfQuotationsById(id);
 
-    private void modify() {
+        Quote quote = quotations.get(index);
 
+        System.out.print("명언(기존) : " + quote.content);
+        System.out.print("명언 : ");
+        String content = scanner.nextLine();
+
+        System.out.print("작가(기존) : " + quote.author);
+        System.out.print("작가 : ");
+        String authorName = scanner.nextLine();
+
+        quote.content = content;
+        quote.author = authorName;
+
+        System.out.println(id + "번 명언이 수정되었습니다.");
     }
 
     // Rq를 이용하여 리팩토링 함.
