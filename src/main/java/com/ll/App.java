@@ -25,15 +25,22 @@ public class App {
             Rq = new Rq(cmd);
             String action = Rq.getAction();
 
-            if (cmd.equals("종료")) {
-                break;
-            } else if (cmd.equals("등록")) post();
-            else if (cmd.equals("목록")) list();
-            else if (action.equals("삭제")) remove();
-            else if (action.equals("수정")) modify();
+            switch (action) {
+                case "종료":
+                    break;
+                case "등록":
+                    post();
+                case "목록":
+                    list();
+                case "삭제":
+                    remove();
+                case "수정":
+                    modify();
+            }
         }
-//        System.out.printf("입력하신 명령: %s\n", cmd);
     }
+
+//        System.out.printf("입력하신 명령: %s\n", cmd);
 
     void post() {
         System.out.print("명언 : ");
@@ -59,12 +66,12 @@ public class App {
     void remove() {
         // cmd를 받았을 때 처리하는 방법 1.replace  2.substring
         int id = Rq.getParamAsInt("id", 0);
-        for(int i = quotations.size() - 1 ; i >= 0; i--){
+        for (int i = quotations.size() - 1; i >= 0; i--) {
             int q_id = quotations.get(i).no;
-            if (q_id == id){
-              quotations.remove(i);
-              System.out.println((i + 1) + "번 명언이 삭제되었습니다.");
-              return;
+            if (q_id == id) {
+                quotations.remove(i);
+                System.out.println((i + 1) + "번 명언이 삭제되었습니다.");
+                return;
             }
         }
 
