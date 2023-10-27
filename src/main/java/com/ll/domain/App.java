@@ -1,22 +1,22 @@
-package com.ll;
+package com.ll.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    Scanner scanner; // 입력을 받기 위한 scanner 생성
-    int quotesid; // 명언 id넘버 부여를 위한 객체
-    List<Quote> quotations; // 명언 저장소
-    Rq Rq; // Rq 정규식을 이용한 queryString 분해
+    private Scanner scanner; // 입력을 받기 위한 scanner 생성
+    private int quotesid; // 명언 id넘버 부여를 위한 객체
+    private List<Quote> quotations; // 명언 저장소
+    private Rq Rq; // Rq 정규식을 이용한 queryString 분해
 
-    App() {
+    public App() {
         scanner = new Scanner(System.in);
         quotesid = 0;
         quotations = new ArrayList<>();
     }
 
-    void run() {
+    public void run() {
         System.out.println("=== 명언 앱 ===");
 
         while (true) {
@@ -27,22 +27,26 @@ public class App {
 
             switch (action) {
                 case "종료":
-                    break;
+                    return;
                 case "등록":
                     post();
+                    break;
                 case "목록":
                     list();
+                    break;
                 case "삭제":
-                    remove();
+                    remove(Rq);
+                    break;
                 case "수정":
                     modify();
+                    break;
             }
         }
     }
 
 //        System.out.printf("입력하신 명령: %s\n", cmd);
 
-    void post() {
+    private void post() {
         System.out.print("명언 : ");
         String content = scanner.nextLine();
         System.out.print("작가 : ");
@@ -55,32 +59,46 @@ public class App {
         System.out.println(quotesid + "번 명언이 등록되었습니다.");
     }
 
-    void list() {
+    private void list() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("--------------------------");
         for (Quote Q : quotations) {
-            System.out.printf("%d / %s / %s\n", Q.no, Q.author, Q.content);
+            System.out.printf("%d / %s / %s\n", Q.id, Q.author, Q.content);
         }
     }
 
-    void remove() {
+    private void remove(Rq rq) {
         // cmd를 받았을 때 처리하는 방법 1.replace  2.substring
-        int id = Rq.getParamAsInt("id", 0);
-        for (int i = quotations.size() - 1; i >= 0; i--) {
-            int q_id = quotations.get(i).no;
-            if (q_id == id) {
-                quotations.remove(i);
-                System.out.println((i + 1) + "번 명언이 삭제되었습니다.");
-                return;
-            }
+        int id = rq.getParamAsInt("id", 0);
+        if(id == 0){
+            System.out.println("id를 정확히 입력해주세요.");
+            return;
         }
 
+        int index = getIndexOfQuotationsById(id);
 
+        if (index == -1){
+            System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
+        }
+        quotations.remove(index);
+        System.out.println(id + "번 명언이 삭제되었습니다.");
+
+        }
+
+    private int getIndexOfQuotationsById(int id){
+        for(int i = 0; i < quotations.size(); i++){
+            Quote quotation = quotations.get(i);
+
+            if (quotation.id == id){
+                return i;
+            }
+        }
+        return -1;
     }
 
 //        System.out.println(idStr +"번 명언을 삭제합니다.");
 
-    void modify() {
+    private void modify() {
 
     }
 
