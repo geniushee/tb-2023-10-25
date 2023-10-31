@@ -11,11 +11,18 @@ repositories {
 
 dependencies {
     //롬복 의존성 세팅
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    // 데스트 의존성 세팅
+    testImplementation 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // assertThat 의존성 세팅
+    testAnnotationProcessor 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 test {

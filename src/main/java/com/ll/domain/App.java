@@ -14,6 +14,16 @@ public class App {
         scanner = new Scanner(System.in);
         quotesid = 0;
         quotations = new ArrayList<>();
+
+        initTestData();
+
+    }
+
+
+    private void initTestData() {
+        for (int i = 0; i < 10; i++) {
+            write("명언" + i+1, "작가" + i+1);
+        }
     }
 
     public void run() {
@@ -52,9 +62,7 @@ public class App {
         System.out.print("작가 : ");
         String authorName = scanner.nextLine();
 //                System.out.printf("명언 : %s, 작가 : %s\n", content, authorName);
-
-        quotesid++; // 등록시 번호 증가
-        quotations.add(new Quote(quotesid, content, authorName));
+        write(content, authorName);
 
         System.out.println(quotesid + "번 명언이 등록되었습니다.");
     }
@@ -70,35 +78,24 @@ public class App {
     private void remove(Rq rq) {
         // cmd를 받았을 때 처리하는 방법 1.replace  2.substring
         int id = rq.getParamAsInt("id", 0);
-        if(id == 0){
+        if (id == 0) {
             System.out.println("id를 정확히 입력해주세요.");
             return;
         }
 
         int index = getIndexOfQuotationsById(id);
 
-        if (index == -1){
+        if (index == -1) {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
         }
         quotations.remove(index);
         System.out.println(id + "번 명언이 삭제되었습니다.");
 
-        }
-
-    private int getIndexOfQuotationsById(int id){
-        for(int i = 0; i < quotations.size(); i++){
-            Quote quotation = quotations.get(i);
-
-            if (quotation.getId() == id){
-                return i;
-            }
-        }
-        return -1;
     }
 
     private void modify(Rq rq) {
         int id = rq.getParamAsInt("id", 0);
-        if(id == 0){
+        if (id == 0) {
             System.out.println("id를 정확히 입력해주세요.");
             return;
         }
@@ -118,6 +115,24 @@ public class App {
         quote.setAuthor(authorName);
 
         System.out.println(id + "번 명언이 수정되었습니다.");
+    }
+
+    private int getIndexOfQuotationsById(int id) {
+        for (int i = 0; i < quotations.size(); i++) {
+            Quote quotation = quotations.get(i);
+
+            if (quotation.getId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    void write(String content, String author){
+        quotesid++;
+        int id = quotesid;
+        Quote quotation = new Quote(id, content, author);
+        quotations.add(quotation);
     }
 
     // Rq를 이용하여 리팩토링 함.
